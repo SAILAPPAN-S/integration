@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0ede6;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      color: #1a1a1a;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #111;
+      margin-bottom: 48px;
+      line-height: 1;
+    }
+
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888;
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: #d6d2ca;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    }
+
+    .icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: #777;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 22px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: gap 0.15s ease;
+    }
+
+    .card:hover .card-link { gap: 10px; }
+
+    .icon-red    { background: #fde8e8; }
+    .icon-pink   { background: #fde8ef; }
+    .icon-purple { background: #ede8fd; }
+    .icon-teal   { background: #e3f5ef; }
+    .icon-amber  { background: #fdf3e3; }
+
+    .link-blue   { color: #3d6bff; }
+    .link-rose   { color: #e0456e; }
+    .link-violet { color: #7c52d4; }
+    .link-teal   { color: #1a9e72; }
+    .link-amber  { color: #c47f17; }
+
+    code.inline {
+      font-size: 12px;
+      background: #f3f3f3;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 40px; }
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .page { padding: 36px 20px 60px; }
+      h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Dashboard</h1>
+
+  <div class="section-row">
+    <span class="section-label">Sailappan's Tasks</span>
+    <span class="section-line"></span>
+  </div>
+
+  <!-- Row 1 -->
+  <div class="grid">
+
+    <a class="card" href="/usera">
+      <div class="icon-badge icon-red">💬</div>
+      <p class="card-title">User A — English Chat</p>
+      <p class="card-desc">Open the English-side chat interface. Messages are automatically translated to Japanese for User B.</p>
+      <span class="card-link link-blue">
+        Open Module
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <a class="card" href="/userb">
+      <div class="icon-badge icon-pink">🌐</div>
+      <p class="card-title">User B — 日本語 Chat</p>
+      <p class="card-desc">Open the Japanese-side chat interface. Type in Japanese and User A receives an English translation.</p>
+      <span class="card-link link-rose">
+        Open Module
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <a class="card" href="/profile">
+      <div class="icon-badge icon-purple">👤</div>
+      <p class="card-title">User Profile</p>
+      <p class="card-desc">View a bilingual user profile rendered server-side with Flask templates. Toggle between EN and JA bios.</p>
+      <span class="card-link link-violet">
+        Open Module
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+  </div>
+    <div></div>
+  </div>
+</div>
+
+<script>
+  async function runSend() {
+    const user_id = document.getElementById('f-user').value.trim() || 'anon';
+    const room_id = document.getElementById('f-room').value.trim() || 'room_1';
+    const text    = document.getElementById('f-text').value.trim();
+    const box     = document.getElementById('response-box');
+    if (!text) { box.style.color='#c0392b'; box.textContent='// error: text field is empty'; return; }
+    box.style.color='#aaa'; box.textContent='// sending…';
+    try {
+      const res  = await fetch('/api/send', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ user_id, room_id, text })
+      });
+      const data = await res.json();
+      box.style.color = res.ok ? '#2e7d32' : '#c0392b';
+      box.textContent = JSON.stringify(data, null, 2);
+    } catch(err) {
+      box.style.color='#c0392b'; box.textContent=`// fetch error: ${err.message}`;
+    }
+  }
+
+  async function runHealth() {
+    const box = document.getElementById('health-box');
+    box.style.color='#aaa'; box.textContent='// pinging…';
+    try {
+      const res  = await fetch('/health');
+      const data = await res.json();
+      box.style.color='#2e7d32'; box.textContent=JSON.stringify(data,null,2);
+    } catch(err) {
+      box.style.color='#c0392b'; box.textContent=`// fetch error: ${err.message}`;
+    }
+  }
+</script>
+</body>
+</html>
