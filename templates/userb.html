@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UserB - Japanese Chat</title>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif; 
+            max-width: 900px; margin: 0 auto; padding: 20px; 
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            min-height: 100vh;
+        }
+        .header { 
+            text-align: center; color: white; margin-bottom: 30px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .chat-container { 
+            background: white; height: 60vh; overflow-y: auto; 
+            padding: 20px; margin-bottom: 20px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .message { 
+            margin: 15px 0; padding: 15px 20px; border-radius: 25px; 
+            max-width: 75%; animation: slideIn 0.4s ease-out;
+        }
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .sent { 
+            background: linear-gradient(135deg, #ff6b35, #f7931e); 
+            color: white; margin-left: auto; text-align: right; 
+        }
+        .received { 
+            background: linear-gradient(135deg, #11998e, #38ef7d); 
+            color: white; margin-right: auto; 
+        }
+        .input-group { 
+            display: flex; gap: 15px; background: white; 
+            padding: 20px; border-radius: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        input[type="text"] { 
+            flex: 1; padding: 18px 25px; font-size: 16px; 
+            border: 2px solid #e9ecef; border-radius: 25px; outline: none;
+            font-family: inherit;
+        }
+        input:focus { border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,107,0.1); }
+        button { 
+            padding: 18px 35px; background: linear-gradient(135deg, #ff6b35, #f7931e); 
+            color: white; border: none; border-radius: 25px; font-size: 16px; 
+            cursor: pointer; font-weight: 600; transition: all 0.3s;
+        }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,107,107,0.4); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .status { 
+            text-align: center; padding: 15px; background: rgba(255,255,255,0.9); 
+            border-radius: 15px; margin-bottom: 20px; backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🇯🇵 <strong>UserB</strong> (日本語)</h1>
+        <p>UserAの英語メッセージが日本語で表示されます <span style="font-size: 0.9em;">🔄 リアルタイム</span></p>
+    </div>
+    
+    <div id="status" class="status">🔄 UserAと接続中...</div>
+    <div id="chat" class="chat-container"></div>
+    
+    <div class="input-group">
+        <input type="text" id="messageInput" placeholder="日本語メッセージを入力..." disabled>
+        <button id="sendBtn" onclick="sendMessage()" disabled>送信</button>
+    </div>
+    <!-- Add this navigation bar to both usera.html and userb.html -->
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <a href="/profile" style="
+            background: rgba(255,255,255,0.9); padding: 10px 20px; 
+            border-radius: 25px; text-decoration: none; color: #333;
+            font-weight: 600; backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        ">👤 Profile</a>
+    </div>
+    <script>
+        const socket = io();
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const status = document.getElementById('status');
+        
+        socket.on('connect', () => {
+            status.innerHTML = '🟢 <strong>接続完了！</strong> UserA(英語)とチャット';
+            input.disabled = false;
+            sendBtn.disabled = false;
+        });
+        
+        socket.on('status', (data) => {
+            status.innerHTML = data.message;
+        });
+        
+        socket.on('receive_message', (data) => {
+            if (data.sender === 'usera') {
+                // UserB receives Japanese translation from UserA's English
+                addMessage(data.translated_text, true, 'EN→JA');
+            }
+        });
+        
+        function addMessage(text, isReceived, direction) {
+            const msg = document.createElement('div');
+            msg.className = `message ${isReceived ? 'received' : 'sent'}`;
+            msg.innerHTML = `
+                <div style="font-weight: 600; margin-bottom: 5px;">
+                    ${isReceived ? 'UserA (英語→)' : 'あなた'}
+                </div>
+                <div style="font-size: 16px;">${text}</div>
+                <div style="opacity: 0.8; font-size: 12px; margin-top: 5px;">${direction}</div>
+            `;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text || socket.disconnected) return;
+            
+            // Add my message immediately (optimistic update)
+            addMessage(text, false, 'JA→EN');
+            socket.emit('send_message', { sender: 'userb', text: text });
+            input.value = '';
+        }
+        
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

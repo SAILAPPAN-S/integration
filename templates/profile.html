@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Taro Tanaka - Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .handle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 32px 40px;
+        }
+
+        .bio-section {
+            margin-bottom: 32px;
+        }
+
+        .bio-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .bio-text {
+            font-size: 18px;
+            color: #1e293b;
+            line-height: 1.7;
+            padding: 24px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+            min-height: 120px;
+            white-space: pre-wrap;
+        }
+
+        .translate-section {
+            text-align: center;
+            padding: 24px 0;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .translate-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 160px;
+        }
+
+        .translate-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .translate-btn.translated {
+            background: #10b981;
+        }
+
+        .translate-btn.translated:hover {
+            background: #059669;
+        }
+
+        .lang-indicator {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 4px 12px;
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 24px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #eff6ff;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .container { border-radius: 12px; }
+            .header, .content { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="avatar">TT</div>
+            <div class="name">田中 太郎 (Taro Tanaka)</div>
+            <div class="handle">@tarotanka</div>
+        </div>
+
+        <div class="content">
+            <div class="bio-section">
+                <div class="bio-label">About</div>
+                <div class="bio-text" id="bioText">
+AI/ML Engineer building real-time chat systems with Flask and SocketIO. Passionate about production ML deployments.
+                </div>
+            </div>
+
+            <div class="translate-section">
+                <button class="translate-btn" id="translateBtn">
+                    <span id="btnText">Translate to Japanese</span>
+                    <span id="langIndicator" class="lang-indicator">🇺🇸 EN</span>
+                </button>
+            </div>
+
+            <a href="/usera" class="back-btn">← Back to Chat</a>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'profile_lang';
+        let currentLang = localStorage.getItem(STORAGE_KEY) || 'en';
+
+        const bioEn = `AI/ML Engineer building real-time chat systems with Flask and SocketIO. 
+Passionate about production ML deployments.`;
+
+        const bioJa = `AI/MLエンジニア。FlaskとSocketIOでリアルタイムチャットシステムを構築中。
+プロダクションレベルのMLデプロイに情熱を注いでいます。`;
+
+        function updateProfile(lang) {
+            const bioText = document.getElementById('bioText');
+            const btnText = document.getElementById('btnText');
+            const langIndicator = document.getElementById('langIndicator');
+            const translateBtn = document.getElementById('translateBtn');
+
+            // Update bio
+            bioText.textContent = lang === 'en' ? bioEn : bioJa;
+
+            // Update button
+            btnText.textContent = lang === 'en' ? 'Translate to Japanese' : 'Translate to English';
+            langIndicator.textContent = lang === 'en' ? '🇺🇸 EN' : '🇯🇵 JA';
+            langIndicator.style.background = lang === 'en' ? '#f1f5f9' : '#d1fae5';
+
+            // Button styling
+            translateBtn.classList.toggle('translated', lang === 'ja');
+
+            // Save state
+            localStorage.setItem(STORAGE_KEY, lang);
+            currentLang = lang;
+        }
+
+        function toggleTranslation() {
+            const newLang = currentLang === 'en' ? 'ja' : 'en';
+            updateProfile(newLang);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProfile(currentLang);
+            document.getElementById('translateBtn').onclick = toggleTranslation;
+        });
+    </script>
+</body>
+</html>
